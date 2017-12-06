@@ -7,7 +7,20 @@ head(mainDataset)
 nrow(mainDataset)
 #Display Colnames in Dataset
 colnames(mainDataset)
-#Moving Averages 
+#Base Statistics
+#
+#Mean
+mean(mainDataset$Close)
+#Median
+median(mainDataset$Close)
+#Variance
+var(mainDataset$Close)
+#Standard Deviation
+sd(mainDataset$Close)
+#Standard Scores
+score <- scale(mainDataset$Close)
+
+#Moving Averages
 #
 #Load Simple Moving Average for 1 week --> 4 values a day and 7 days a week = 28 values a week
 sma28 <- SMA(mainDataset[c('Close')],n=28)
@@ -48,10 +61,13 @@ plot(dataWithBB$DayCount/4,dataWithBB$pctB,xlab = "Days Elapsed", ylab = "Percen
 plot(dataWithBB$DayCount/4,dataWithBB$pctB,xlab = "Days Elapsed", ylab = "Log of Percent Change", type="l", log = "y")
 #Clearly we are missing out on data lesser than 0, hence, we construct a volatility index from absolute values of percent change
 Vindex = data.frame(dataWithBB$pctB)
+#Change name of column from pctB to Percent Change
 names(Vindex) <- c("PercentChange")
 Vindex$PercentChange <- abs((Vindex$PercentChange*100-100))
 allData = data.frame(dataWithBB,Vindex)
 #Plot graph of Volatility Index
 plot(dataWithBB$DayCount/4, Vindex$PercentChange, xlab = "Days Elapsed", ylab = "Absolute value (log Index) ", type="l", log = "y")
+#Write back to original table
 write.table(allData,file="6HrDayCount.csv",na="",sep =",",row.names=FALSE)
+
 
