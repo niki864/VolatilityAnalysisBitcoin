@@ -7,12 +7,18 @@ head(mainDataset)
 nrow(mainDataset)
 #Display Colnames in Dataset
 colnames(mainDataset)
+#Moving Averages 
+#
 #Load Simple Moving Average for 1 week --> 4 values a day and 7 days a week = 28 values a week
 sma28 <- SMA(mainDataset[c('Close')],n=28)
 #Display the table with SMA-28 values
 head(sma28,n=50)
 #Load Exponential Moving Averages for 1 week
 ema28 <- EMA(mainDataset[c('Close')],n=28)
+#
+#
+#BollingerBand Analysis
+#
 #BollingerBand Initialisation
 bb28 = BBands(mainDataset[c('Close')], n=28, sd = 2.0)
 #New data frame to hold all our charts
@@ -31,6 +37,11 @@ lines(dataWithBB$Close, col='blue')
 lines(dataWithBB$up, col='green')
 lines(dataWithBB$dn, col='red')
 lines(dataWithBB$mavg, col='purple')
+#
+#
+#Volatiltiy Analysis
+#
+#
 #Volatiltiy As A Factor of Range from upper and lower Bollinger Bands
 plot(dataWithBB$DayCount/4,dataWithBB$pctB,xlab = "Days Elapsed", ylab = "Percentage Change", type="l")
 #Outlier Analysis by smoothing using a log function
@@ -39,5 +50,8 @@ plot(dataWithBB$DayCount/4,dataWithBB$pctB,xlab = "Days Elapsed", ylab = "Log of
 Vindex = data.frame(dataWithBB$pctB)
 names(Vindex) <- c("PercentChange")
 Vindex$PercentChange <- abs((Vindex$PercentChange*100-100))
+allData = data.frame(dataWithBB,Vindex)
 #Plot graph of Volatility Index
 plot(dataWithBB$DayCount/4, Vindex$PercentChange, xlab = "Days Elapsed", ylab = "Absolute value (log Index) ", type="l", log = "y")
+write.table(allData,file="6HrDayCount.csv",na="",sep =",",row.names=FALSE)
+
