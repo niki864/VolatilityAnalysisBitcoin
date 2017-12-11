@@ -69,6 +69,7 @@ allData = data.frame(dataWithBB,Vindex)
 plot(dataWithBB$Timestamp/4, Vindex$PercentChange, xlab = "Days Elapsed", ylab = "Absolute value (log Index) ", type="l", log = "y")
 #Write back to original table
 write.table(allData,file="6HrDayCount.csv",na="",sep =",",row.names=FALSE)
+#Create a new volatility index to measure bitcoin volatility as a measure of its SMA over the previous week.
 Vindex2 = Vindex$PercentChange[complete.cases(Vindex$PercentChange)]
 plot(allData$Timestamp[complete.cases(allData$PercentChange)]/4, 1/(0.75*Vindex2), xlab = "Number of Days", ylab = "Volatility Magnitude", type="l", col="blue")
 
